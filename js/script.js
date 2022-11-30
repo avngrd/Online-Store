@@ -10,131 +10,41 @@ var mySlider = new rSlider({
   step: 10000
 });
 
-const CARDS_NUMBER = 7;
-
-const MIN_PRICE = 250000;
-const MAX_PRICE = 2000000;
-
-const MIN_RATING = 0;
-const MAX_RAITING = 5;
-
-const MIN_BUILDING = 1;
-const MAX_BUILDING = 40;
-
-const MIN_AREA = 30;
-const MAX_AREA = 250;
-
-const MIN_ROOMS_COUNT = 1;
-const MAX_ROOMS_COUNT = 7;
-
-const CATEGORY = 'Недвижимость';
-
-const NAME = [
-  'Двушка в центре Питера',
-  'Однушка в спальнике Питера',
-  'Трешка рядом с Кремлём',
-  'Студия для аскетов',
-  'Аппартаменты',
-];
-
-const DESCRIPTION = [
-  'Студия с лаконичным дизайном возле Ангары',
-  'Трехкомнатная квартира для большой семьи рядом с Крёмлем',
-  '2 минуты до набережной и прекрасного вида на Волгу',
-  'В квартире есть сауна, джакузи и домашний кинотеатр',
-  'Уютная однушка в тихом спальном районе. Рядом лес и озёра',
-];
-
-const FULL_NAMES = [
-  'Бюро Семёна',
-  'Виталий Петрович',
-  'Марья Андреевна',
-  'Вадим Лазук'
-];
-
+const URL = 'https://morfey216.github.io/online-store-bd/bd.json';
+const DEFAULT_CATEGORY = 'popular';
 const currentDate = new Date();
 
-const PHOTOS = [
-  'img/house_1.png',
-  'img/house_2.png',
-  'img/house_3.png',
-  'img/house_4.png',
-  'img/apt_1.png',
-  'img/apt_2.png',
-  'img/apt_3.png',
-  'img/apt_4.png',
-  'img/apt_5.png',
-  'img/apt_6.png'
-];
 
-const СITIES = [
-  'Минск',
-  'Иркутск',
-  'Москва',
-  'Красноярск'
-];
+let currentData = [];
 
-const STREETS = [
-  'ул. Шахтёров',
-  'ул. Полярная',
-  'ул. Лиственная',
-  'ул. Мира',
-  'ул. Советская'
-];
-
-const TYPES = [
-  'house',
-  'apartament',
-  'flat'
-];
-
-function randomPhotosCount(photo) {
-  const photosArray = [];
-
-  for (let i = 0; i < photo; i++) {
-    photosArray.push(PHOTOS[getRandomNumber(PHOTOS)])
+async function getResponse() {
+  async function onError() {
+    console.log('Ошибка HTTP: ' + response.status)
   }
-  return photosArray
-};
-
-const getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-};
-
-function nameRender() {
-  const object = {
-    name: NAME[getRandomNumber(0, NAME.length)],
-    description: DESCRIPTION[getRandomNumber(0, DESCRIPTION.length)],
-    price: getRandomNumber(MIN_PRICE, MAX_PRICE / 100) * 100,
-    category: 'Недвижимость',
-    seller: {
-      fullname: FULL_NAMES[getRandomNumber(0, FULL_NAMES.length)],
-      raiting: getRandomNumber(MIN_RATING, MAX_RAITING * 10) / 10,
-    },
-    publishdate: new Date(currentDate.getFullYear(), getRandomNumber(0, currentDate.getMonth()), getRandomNumber(1, currentDate.getDate())),
-    address: {
-      city: СITIES[getRandomNumber(0, СITIES.length)],
-      street: STREETS[getRandomNumber(0, STREETS.length)],
-      building: 'Д.' + getRandomNumber(MIN_BUILDING, MAX_BUILDING),
-    },
-    photos: PHOTOS[getRandomNumber(0, PHOTOS.length)],
-    filters: {
-      type: TYPES[getRandomNumber(0, TYPES.length)],
-      area: getRandomNumber(MIN_AREA, MAX_AREA),
-      roomscount: getRandomNumber(MIN_ROOMS_COUNT, MAX_ROOMS_COUNT),
-    }
-  }
-  return object
-};
-
-const currentData = [];
-
-function createRenderData() {
-  for (let i = 0; i < CARDS_NUMBER; i++) {
-    currentData.push(nameRender());
+  const response = await fetch(URL);
+  if (response.ok) {
+    const content = await response.json();
+    currentData = content.products;
+    currentData.map((itData) => {
+      itData.publishDate = new Date(Number(itData['publish-date']));
+    });
+    renderCards(currentData);
+    popUpDataRender(currentData);
+  } else {
+    onError();
   }
 }
-createRenderData();
+
+getResponse();
+
+function getPhotos() {
+  const photosArray = [];
+
+  for (let i = 0; i < currentData.photos.length; i++) {
+    photosArray.push(currentData.photos)
+  }
+  return photosArray;
+};
 
 function renderMarkup(target, markup) {
   target.innerHTML = " ",
@@ -153,7 +63,7 @@ function renderCards(currentCardsData = currentData) {
     </button>
     <div class="product__image">
       <div class="product__image-more-photo hidden">+2 фото</div>
-      <img src="${cardData.photos}" width="318" height="220" alt="Загородный дом с видом на озеро">
+      <img src="${cardData.photos[0]}" width="318" height="220" alt="Загородный дом с видом на озеро">
     </div>
     <div class="product__content">
       <h3 class="product__title">
@@ -161,14 +71,14 @@ function renderCards(currentCardsData = currentData) {
       </h3>
       <div class="product__price"> ${cardData.price}₽</div>
       <div class="product__address">${cardData.address.city}</div>
-      <div class="product__date">${makeUpDate(cardData.publishdate)}</div>
+      <div class="product__date">${cardData.publishDate}</div>
     </div>
   </li>`
   }).join('');
 
-  renderMarkup(cardsList, cards)
+  renderMarkup(cardsList, cards);
+  console.log()
 };
-renderCards();
 
 function makeUpDate(date) {
   if (date.getDate() == currentDate.getDate() && date.getFullYear() == currentDate.getFullYear() && date.getMonth() == currentDate.getMonth()) {
@@ -184,6 +94,7 @@ const popUpMenu = document.querySelector('.popup');
 const closePopUpMenu = document.querySelector('.popup__close');
 const popUpChars = document.querySelector('.popup__chars');
 
+
 function popUpDataRender() {
   const popUpDate = document.querySelector('.popup__date');
   const popUpTitle = document.querySelector('.popup__title');
@@ -193,7 +104,8 @@ function popUpDataRender() {
   const popUpSellerRating = popUpBlock.querySelector('.seller__rating span');
   const popUpDescription = popUpBlock.querySelector('.popup__description p');
   const popUpAddress = popUpBlock.querySelector('.popup__address');
-
+  const popUpGallery = popUpBlock.querySelector('.popup__gallery');
+  const popUpGalleryList = popUpGallery.querySelector('.gallery__list');
 
   function onTitlePopUpClick(evt) {
     evt.preventDefault();
@@ -202,34 +114,51 @@ function popUpDataRender() {
     const currentImg = evt.target.closest('img');
     const currentLink = evt.target.closest('a');
 
-
     if (currentImg || currentLink) {
       popUpMenu.style.display = 'block';
-      
+
       const cardData = currentData[currentCard.dataset.index];
       popUpTitle.textContent = cardData.name;
       popUpPrice.textContent = cardData.price + '₽';
-      popUpDate.textContent = makeUpDate(cardData.publishdate);
+      // popUpDate.textContent = makeUpDate(cardData.publishdate);
       popUpSellerName.textContent = cardData.seller.fullname;
-      popUpSellerRating.textContent = cardData.seller.raiting;
+      popUpSellerRating.textContent = cardData.seller.rating;
       popUpDescription.textContent = cardData.description;
       popUpAddress.textContent = cardData.address.city + ', ' + cardData.address.street + ', ' + cardData.address.building;
-      
-      function popUpCharsItemsData(){
-          const mark =  `<ul class="popup__chars chars">
+
+      function popUpCharsItemsData() {
+        const mark = `
+          <div class="gallery__main-pic">
+                  <img src="${cardData.photos[0]}" width="520" height="340" alt="Загородный дом">
+                </div>
+                <ul class="gallery__list">
+                  <li class="gallery__item gallery__item--active">
+                    <img src="${cardData.photos[0]}" width="124" height="80" alt="Загородный дом">
+                  </li>
+                  <li class="gallery__item">
+                    <img src="${cardData.photos[1]}" width="124" height="80" alt="Загородный дом">
+                  </li>
+                  <li class="gallery__item">
+                    <img src="${cardData.photos[2]}" width="124" height="80" alt="Загородный дом">
+                  </li>
+                  <li class="gallery__item">
+                    <img src="${cardData.photos[3]}" width="124" height="80" alt="Загородный дом">
+                  </li>
+          <ul class="popup__chars chars">
           <li class="chars__item">
             <div class="chars__name">Площадь</div>
             <div class="chars__value">${cardData.filters.area}</div>
           </li>
           <li class="chars__item">
             <div class="chars__name">Количество комнат</div>
-            <div class="chars__value">${cardData.filters.roomscount}</div>
+            <div class="chars__value">${cardData.filters['rooms-count']}</div>
           </li>
           <li class="chars__item">
             <div class="chars__name">Тип недвижимости</div>
             <div class="chars__value">${cardData.filters.type}</div>
           </li>
         </ul>`
+        renderMarkup(popUpGallery);
         renderMarkup(popUpChars, mark);
       };
       popUpCharsItemsData();
@@ -238,21 +167,87 @@ function popUpDataRender() {
   cardTitle.addEventListener('click', onTitlePopUpClick);
 };
 
-popUpDataRender();
-
 function onPopUpCloseClick() {
   popUpMenu.style.display = 'none';
 };
 
 closePopUpMenu.addEventListener('click', onPopUpCloseClick);
 
-function escClosePopUp (){
-  document.addEventListener('keydown', function(evt){
-    if(evt.key === 'Escape'){
+function escClosePopUp() {
+  document.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Escape') {
       onPopUpCloseClick()
-    }else if(evt.key ==='Enter'){
+    } else if (evt.key === 'Enter') {
       onPopUpCloseClick()
     }
   });
 };
 escClosePopUp();
+
+const sortList = document.querySelector('.sorting__order-list');
+const sortPopularButton = document.querySelector('#sort-popular');
+const sortCheapButton = document.querySelector('#sort-cheap');
+const sortNewButton = document.querySelector('#sort-new');
+
+function getSortedCheap() {
+  return currentData.sort(function (minPrice, maxPrice) {
+    if (minPrice['price'] < maxPrice['price']) return -1;
+  })
+};
+
+function getSortedRaiting() {
+  return currentData.sort(function (minRaiting, maxRaiting) {
+    if (minRaiting.seller.rating < maxRaiting.seller.rating) return -1;
+  })
+};
+
+function getSortedTime() {
+  return currentData.sort(function (minTime, maxTime) {
+    if (minTime['publish-date'] < maxTime['publish-date']) return -1;
+  })
+};
+
+function onSortingListClick(evt) {
+  evt.preventDefault();
+
+  const button = evt.target.closest('li');
+
+  if (button.dataset.cheap) {
+    const currentCheap = getSortedCheap();
+    renderCards(currentCheap);
+    sortCheapButton.checked = true;
+    sortNewButton.checked = false;
+    sortPopularButton.checked = false;
+  };
+  if (button.dataset.popular) {
+    const currentRaiting = getSortedRaiting();
+    renderCards(currentRaiting);
+    sortCheapButton.checked = false;
+    sortNewButton.checked = false;
+    sortPopularButton.checked = true;
+  };
+  if(button.dataset.newt){
+    const currentTime = getSortedTime();
+    renderCards(currentTime);
+    sortCheapButton.checked = false;
+    sortNewButton.checked = true;
+    sortPopularButton.checked = false;
+  }
+
+};
+
+sortList.addEventListener('click', onSortingListClick);
+
+const filterInputsList = document.querySelector('.filter__checkboxes-list');
+
+function filtersBarClickHandler(evt){
+  evt.preventDefault();
+
+  const button = evt.target.closest('li');
+  
+  if(button){ 
+
+  }
+
+};
+filterInputsList.addEventListener('click', filtersBarClickHandler);

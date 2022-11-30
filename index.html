@@ -89,16 +89,16 @@
                     <fieldset class="sorting__order">
                       <legend>Показать сначала:</legend>
                       <ul class="sorting__order-list">
-                        <li class="sorting__order-tab">
-                          <input class="visually-hidden" type="radio" name="sorting-order" value="popular" id="sort-popular" checked>
+                        <li class="sorting__order-tab" data-popular="popular">
+                          <input class="visually-hidden" type="radio" name="sorting-order" value="popular" id="sort-popular" >
                           <label for="sort-popular">Популярные</label>
                         </li>
-                        <li class="sorting__order-tab">
+                        <li class="sorting__order-tab" data-cheap="cheap">
                           <input class="visually-hidden" type="radio" name="sorting-order" value="cheap" id="sort-cheap">
                           <label for="sort-cheap">Дешёвые</label>
                         </li>
-                        <li class="sorting__order-tab">
-                          <input class="visually-hidden" type="radio" name="sorting-order" value="cheap" id="sort-new">
+                        <li class="sorting__order-tab"data-newt="newt">
+                          <input class="visually-hidden" type="radio" name="sorting-order" value="newt" id="sort-new" >
                           <label for="sort-new">Новые</label>
                         </li>
                       </ul>
@@ -236,6 +236,7 @@
       </section>
 
       <script src="./js/rSlider.min.js"></script>
-      <script src="./js/script.js"></script>
+      <script  src="./js/script.js"></script>
+      <!-- <script  src="./js/backend.js"></script> -->
     </body>
 </html>
