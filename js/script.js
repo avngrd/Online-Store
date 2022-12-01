@@ -2,13 +2,20 @@
 
 var mySlider = new rSlider({
   target: '#sampleSlider',
-  values: [10000, 1000000],
+  values: {min: 300000,max:3100000},
   range: true,
   tooltip: true,
   scale: true,
   labels: false,
-  step: 10000
+  step: 10000,
+  onChange: function(values){
+    console.log(mySlider.getValue());
+  }
 });
+
+let priceValues = mySlider.getValue();
+
+console.log(priceValues)
 
 const URL = 'https://morfey216.github.io/online-store-bd/bd.json';
 const DEFAULT_CATEGORY = 'popular';
@@ -77,7 +84,6 @@ function renderCards(currentCardsData = currentData) {
   }).join('');
 
   renderMarkup(cardsList, cards);
-  console.log()
 };
 
 function makeUpDate(date) {
@@ -226,27 +232,41 @@ function onSortingListClick(evt) {
     sortNewButton.checked = false;
     sortPopularButton.checked = true;
   };
-  if(button.dataset.newt){
+  if (button.dataset.newt) {
     const currentTime = getSortedTime();
     renderCards(currentTime);
     sortCheapButton.checked = false;
     sortNewButton.checked = true;
     sortPopularButton.checked = false;
   }
-
 };
 
 sortList.addEventListener('click', onSortingListClick);
 
 const filterInputsList = document.querySelector('.filter__checkboxes-list');
+const houseButton = filterInputsList.querySelector('#house');
+const flatButton = filterInputsList.querySelector('#flat');
+const apartmentsButton = filterInputsList.querySelector('#apartments');
 
-function filtersBarClickHandler(evt){
+function filtersBarClickHandler(evt) {
   evt.preventDefault();
 
   const button = evt.target.closest('li');
-  
-  if(button){ 
 
+  if (button.dataset.type === 'house') {
+    houseButton.checked = true; 
+    flatButton.checked = false;
+    apartmentsButton.checked = false;
+  };
+  if(button.dataset.type === 'flat'){
+    houseButton.checked = false; 
+    flatButton.checked = true;
+    apartmentsButton.checked = false;
+  };
+  if(button.dataset.type === 'apartments'){
+    houseButton.checked = false; 
+    flatButton.checked = false;
+    apartmentsButton.checked = true;
   }
 
 };
