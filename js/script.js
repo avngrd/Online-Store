@@ -15,12 +15,9 @@ var mySlider = new rSlider({
 
 let priceValues = mySlider.getValue();
 
-console.log(priceValues)
-
 const URL = 'https://morfey216.github.io/online-store-bd/bd.json';
 const DEFAULT_CATEGORY = 'popular';
 const currentDate = new Date();
-
 
 let currentData = [];
 
@@ -35,6 +32,9 @@ async function getResponse() {
     currentData.map((itData) => {
       itData.publishDate = new Date(Number(itData['publish-date']));
     });
+    currentData.map((itType) => {
+      console.log(itType.filters.type);
+    })
     renderCards(currentData);
     popUpDataRender(currentData);
   } else {
@@ -252,11 +252,12 @@ function filtersBarClickHandler(evt) {
   evt.preventDefault();
 
   const button = evt.target.closest('li');
-
+  
   if (button.dataset.type === 'house') {
     houseButton.checked = true; 
     flatButton.checked = false;
     apartmentsButton.checked = false;
+    renderCards(currentData)
   };
   if(button.dataset.type === 'flat'){
     houseButton.checked = false; 
@@ -268,6 +269,8 @@ function filtersBarClickHandler(evt) {
     flatButton.checked = false;
     apartmentsButton.checked = true;
   }
-
 };
+
 filterInputsList.addEventListener('click', filtersBarClickHandler);
+
+const filterButtonShow = document.querySelector('.filter__button');
