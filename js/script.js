@@ -32,9 +32,6 @@ async function getResponse() {
     currentData.map((itData) => {
       itData.publishDate = new Date(Number(itData['publish-date']));
     });
-    currentData.map((itType) => {
-      console.log(itType.filters.type);
-    })
     renderCards(currentData);
     popUpDataRender(currentData);
   } else {
@@ -257,17 +254,34 @@ function filtersBarClickHandler(evt) {
     houseButton.checked = true; 
     flatButton.checked = false;
     apartmentsButton.checked = false;
-    renderCards(currentData)
+    let houseArray =[...currentData].filter(function(card){
+      if(card.filters.type=='house'){
+        return card.filters.type
+      }
+    })
+    renderCards(houseArray)
   };
   if(button.dataset.type === 'flat'){
     houseButton.checked = false; 
     flatButton.checked = true;
     apartmentsButton.checked = false;
+    let flatArray =[...currentData].filter(function(card){
+      if(card.filters.type=='flat'){
+        return card.filters.type
+      }
+    })
+    renderCards(flatArray)
   };
   if(button.dataset.type === 'apartments'){
     houseButton.checked = false; 
     flatButton.checked = false;
     apartmentsButton.checked = true;
+    let apartmentArray =[...currentData].filter(function(card){
+      if(card.filters.type=='apartment'){
+        return card.filters.type
+      }
+    })
+    renderCards(apartmentArray)
   }
 };
 
