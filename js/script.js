@@ -2,12 +2,12 @@
 
 var mySlider = new rSlider({
   target: '#sampleSlider',
-  values: {min: 300000,max:3100000},
+  values: {min: 300000,max:13300000},
   range: true,
   tooltip: true,
   scale: true,
   labels: false,
-  step: 100000,
+  step: 1000000,
 });
 
 const URL = 'https://morfey216.github.io/online-store-bd/bd.json';
@@ -284,20 +284,13 @@ filterInputsList.addEventListener('click', filtersBarClickHandler);
 
 const filterButtonShow = document.querySelector('.filter__button');
 let sliderChosenValues;
-let sliderMinValue = mySlider.values.start;
-let sliderMaxValue = mySlider.values.end;
-
-let test = function(){
-  return currentData.sort(function () {
-    if (sliderMinValue < sliderMaxValue) return -1;
-  })
-}
-
+let sliderMinValue = mySlider.values['min'];
+let sliderMaxValue = mySlider.values['max'];
 
 function sliderPriceValues(event){
   event.preventDefault();
-  let be = test();
-  renderCards(be)
+  console.log(sliderMinValue)
+  console.log(sliderMaxValue)
 };
 
 filterButtonShow.addEventListener('click',sliderPriceValues);
