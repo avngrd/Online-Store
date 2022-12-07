@@ -7,13 +7,8 @@ var mySlider = new rSlider({
   tooltip: true,
   scale: true,
   labels: false,
-  step: 10000,
-  onChange: function(values){
-    console.log(mySlider.getValue());
-  }
+  step: 100000,
 });
-
-let priceValues = mySlider.getValue();
 
 const URL = 'https://morfey216.github.io/online-store-bd/bd.json';
 const DEFAULT_CATEGORY = 'popular';
@@ -239,7 +234,7 @@ function onSortingListClick(evt) {
 };
 
 sortList.addEventListener('click', onSortingListClick);
-
+ 
 const filterInputsList = document.querySelector('.filter__checkboxes-list');
 const houseButton = filterInputsList.querySelector('#house');
 const flatButton = filterInputsList.querySelector('#flat');
@@ -254,8 +249,8 @@ function filtersBarClickHandler(evt) {
     houseButton.checked = true; 
     flatButton.checked = false;
     apartmentsButton.checked = false;
-    let houseArray =[...currentData].filter(function(card){
-      if(card.filters.type=='house'){
+    let houseArray = [...currentData].filter(function(card){
+      if(card.filters.type == 'house'){
         return card.filters.type
       }
     })
@@ -265,8 +260,8 @@ function filtersBarClickHandler(evt) {
     houseButton.checked = false; 
     flatButton.checked = true;
     apartmentsButton.checked = false;
-    let flatArray =[...currentData].filter(function(card){
-      if(card.filters.type=='flat'){
+    let flatArray = [...currentData].filter(function(card){
+      if(card.filters.type == 'flat'){
         return card.filters.type
       }
     })
@@ -276,8 +271,8 @@ function filtersBarClickHandler(evt) {
     houseButton.checked = false; 
     flatButton.checked = false;
     apartmentsButton.checked = true;
-    let apartmentArray =[...currentData].filter(function(card){
-      if(card.filters.type=='apartment'){
+    let apartmentArray = [...currentData].filter(function(card){
+      if(card.filters.type == 'apartment'){
         return card.filters.type
       }
     })
@@ -288,3 +283,21 @@ function filtersBarClickHandler(evt) {
 filterInputsList.addEventListener('click', filtersBarClickHandler);
 
 const filterButtonShow = document.querySelector('.filter__button');
+let sliderChosenValues;
+let sliderMinValue = mySlider.values.start;
+let sliderMaxValue = mySlider.values.end;
+
+let test = function(){
+  return currentData.sort(function () {
+    if (sliderMinValue < sliderMaxValue) return -1;
+  })
+}
+
+
+function sliderPriceValues(event){
+  event.preventDefault();
+  let be = test();
+  renderCards(be)
+};
+
+filterButtonShow.addEventListener('click',sliderPriceValues);
