@@ -286,9 +286,9 @@ function filtersBarClickHandler(evt) {
 filterInputsList.addEventListener('click', filtersBarClickHandler);
 
 const filterButtonShow = document.querySelector('.filter__button');
-let sliderChosenValues;
-let sliderMinValue = mySlider.values.start;
-let sliderMaxValue = mySlider.values.end;
+// let sliderChosenValues;
+// let sliderMinValue = mySlider.values.start;
+// let sliderMaxValue = mySlider.values.end;
 
 function sliderPriceValues(event){
   event.preventDefault();
@@ -298,6 +298,17 @@ function sliderPriceValues(event){
 filterButtonShow.addEventListener('click',sliderPriceValues);
 
 
-const slider = document.querySelector('#sampleSlider');
+const roomsList = document.querySelector('.filter__ram-list');
 
-console.log(slider.values.end)
+function onRoomsCountListClick(evt) {
+  evt.preventDefault();
+
+  const button = evt.target.closest('li');
+
+  if (button.value == 'one') {
+    console.log('any')
+  };
+ 
+};
+
+roomsList.addEventListener('click', onRoomsCountListClick);
