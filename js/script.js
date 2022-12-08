@@ -1,14 +1,17 @@
 'use strict'
+var bb;
 
 var mySlider = new rSlider({
   target: '#sampleSlider',
-  values: {min: 300000,max:13300000},
+  values: {min:300000,max:33000000},
   range: true,
   tooltip: true,
   scale: true,
   labels: false,
   step: 1000000,
+  
 });
+
 
 const URL = 'https://morfey216.github.io/online-store-bd/bd.json';
 const DEFAULT_CATEGORY = 'popular';
@@ -284,13 +287,17 @@ filterInputsList.addEventListener('click', filtersBarClickHandler);
 
 const filterButtonShow = document.querySelector('.filter__button');
 let sliderChosenValues;
-let sliderMinValue = mySlider.values['min'];
-let sliderMaxValue = mySlider.values['max'];
+let sliderMinValue = mySlider.values.start;
+let sliderMaxValue = mySlider.values.end;
 
 function sliderPriceValues(event){
   event.preventDefault();
-  console.log(sliderMinValue)
-  console.log(sliderMaxValue)
+
 };
 
 filterButtonShow.addEventListener('click',sliderPriceValues);
+
+
+const slider = document.querySelector('#sampleSlider');
+
+console.log(slider.values.end)
