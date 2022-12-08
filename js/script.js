@@ -27,6 +27,7 @@ async function getResponse() {
   if (response.ok) {
     const content = await response.json();
     currentData = content.products;
+    console.log(currentData)
     currentData.map((itData) => {
       itData.publishDate = new Date(Number(itData['publish-date']));
     });
@@ -305,10 +306,40 @@ function onRoomsCountListClick(evt) {
 
   const button = evt.target.closest('li');
 
-  if (button.value == 'one') {
-    console.log('any')
+  if (button.dataset.room === 'any') {
+    let anyRooms = [...currentData].filter(function(card){
+      if(card){
+        return currentData
+      }
+    })
+    renderCards(anyRooms);
   };
- 
+  if (button.dataset.room === 'one') {
+    let oneRoom = [...currentData].filter(function(card){
+      if(card.filters.roomsCount === 1){
+        return card.filters.roomCcount
+      }
+    })
+    renderCards(oneRoom);
+  };
+  if (button.dataset.room === 'two') {
+    console.log('two')
+  };
+  if (button.dataset.room === 'three') {
+    console.log('three')
+  };
+  if (button.dataset.room === 'four') {
+    console.log('four')
+  };
+  if (button.dataset.room === 'five') {
+    let fiveRoom = [...currentData].filter(function(card){
+      if(card.filters.roomsCount >= 5){
+        return card.filters.roomsCount
+      }
+    })
+    renderCards(fiveRoom);
+  };
+
 };
 
 roomsList.addEventListener('click', onRoomsCountListClick);
