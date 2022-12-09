@@ -3,13 +3,13 @@ var bb;
 
 var mySlider = new rSlider({
   target: '#sampleSlider',
-  values: {min:300000,max:33000000},
+  values: { min: 300000, max: 33000000 },
   range: true,
   tooltip: true,
   scale: true,
   labels: false,
   step: 1000000,
-  
+
 });
 
 
@@ -238,7 +238,7 @@ function onSortingListClick(evt) {
 };
 
 sortList.addEventListener('click', onSortingListClick);
- 
+
 const filterInputsList = document.querySelector('.filter__checkboxes-list');
 const houseButton = filterInputsList.querySelector('#house');
 const flatButton = filterInputsList.querySelector('#flat');
@@ -248,35 +248,35 @@ function filtersBarClickHandler(evt) {
   evt.preventDefault();
 
   const button = evt.target.closest('li');
-  
+
   if (button.dataset.type === 'house') {
-    houseButton.checked = true; 
+    houseButton.checked = true;
     flatButton.checked = false;
     apartmentsButton.checked = false;
-    let houseArray = [...currentData].filter(function(card){
-      if(card.filters.type == 'house'){
+    let houseArray = [...currentData].filter(function (card) {
+      if (card.filters.type == 'house') {
         return card.filters.type
       }
     })
     renderCards(houseArray)
   };
-  if(button.dataset.type === 'flat'){
-    houseButton.checked = false; 
+  if (button.dataset.type === 'flat') {
+    houseButton.checked = false;
     flatButton.checked = true;
     apartmentsButton.checked = false;
-    let flatArray = [...currentData].filter(function(card){
-      if(card.filters.type == 'flat'){
+    let flatArray = [...currentData].filter(function (card) {
+      if (card.filters.type == 'flat') {
         return card.filters.type
       }
     })
     renderCards(flatArray)
   };
-  if(button.dataset.type === 'apartments'){
-    houseButton.checked = false; 
+  if (button.dataset.type === 'apartments') {
+    houseButton.checked = false;
     flatButton.checked = false;
     apartmentsButton.checked = true;
-    let apartmentArray = [...currentData].filter(function(card){
-      if(card.filters.type == 'apartment'){
+    let apartmentArray = [...currentData].filter(function (card) {
+      if (card.filters.type == 'apartment') {
         return card.filters.type
       }
     })
@@ -291,12 +291,12 @@ const filterButtonShow = document.querySelector('.filter__button');
 // let sliderMinValue = mySlider.values.start;
 // let sliderMaxValue = mySlider.values.end;
 
-function sliderPriceValues(event){
+function sliderPriceValues(event) {
   event.preventDefault();
 
 };
 
-filterButtonShow.addEventListener('click',sliderPriceValues);
+filterButtonShow.addEventListener('click', sliderPriceValues);
 
 
 const roomsList = document.querySelector('.filter__ram-list');
@@ -307,39 +307,59 @@ function onRoomsCountListClick(evt) {
   const button = evt.target.closest('li');
 
   if (button.dataset.room === 'any') {
-    let anyRooms = [...currentData].filter(function(card){
-      if(card){
-        return currentData
+    let anyRooms = [...currentData].filter(function (cardData) {
+      if (cardData) {
+        return cardData.filters['rooms-count']
       }
     })
+    popUpDataRender(anyRooms);
     renderCards(anyRooms);
   };
   if (button.dataset.room === 'one') {
-    let oneRoom = [...currentData].filter(function(card){
-      if(card.filters.roomsCount === 1){
-        return card.filters.roomCcount
+    let oneRoom = [...currentData].filter(function (cardData) {
+      if (cardData.filters['rooms-count'] === 1) {
+        return cardData.filters['rooms-count']
       }
     })
+    popUpDataRender(oneRoom);
     renderCards(oneRoom);
   };
   if (button.dataset.room === 'two') {
-    console.log('two')
+    let twoRoom = [...currentData].filter(function (cardData) {
+      if (cardData.filters['rooms-count'] === 2) {
+        return cardData.filters['rooms-count']
+      }
+    })
+    popUpDataRender(twoRoom);
+    renderCards(twoRoom);
   };
   if (button.dataset.room === 'three') {
-    console.log('three')
+    let threeRoom = [...currentData].filter(function (cardData) {
+      if (cardData.filters['rooms-count'] === 3) {
+        return cardData.filters['rooms-count']
+      }
+    })
+    renderCards(threeRoom);
+    popUpDataRender(threeRoom);
   };
   if (button.dataset.room === 'four') {
-    console.log('four')
+    let fourRoom = [...currentData].filter(function (cardData) {
+      if (cardData.filters['rooms-count'] === 4) {
+        return cardData.filters['rooms-count']
+      }
+    })
+    popUpDataRender(fourRoom);
+    renderCards(fourRoom);
   };
   if (button.dataset.room === 'five') {
-    let fiveRoom = [...currentData].filter(function(card){
-      if(card.filters.roomsCount >= 5){
-        return card.filters.roomsCount
+    let fiveRoom = [...currentData].filter(function (cardData) {
+      if (cardData.filters['rooms-count'] === 5) {
+        return cardData.filters['rooms-count']
       }
     })
     renderCards(fiveRoom);
+    popUpDataRender(fiveRoom);
   };
-
 };
 
 roomsList.addEventListener('click', onRoomsCountListClick);
