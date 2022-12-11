@@ -284,19 +284,7 @@ function filtersBarClickHandler(evt) {
   }
 };
 
-// filterInputsList.addEventListener('click', filtersBarClickHandler);
-
-const filterButtonShow = document.querySelector('.filter__button');
-
-function filterParams(event) {
-  event.preventDefault();
-  filtersBarClickHandler();
-  onRoomsCountListClick();
-
-};
-
-filterButtonShow.addEventListener('click', filterParams);
-
+filterInputsList.addEventListener('click', filtersBarClickHandler);
 
 const roomsList = document.querySelector('.filter__ram-list');
 
@@ -361,4 +349,4 @@ function onRoomsCountListClick(evt) {
   };
 };
 
-// roomsList.addEventListener('click', onRoomsCountListClick);
+roomsList.addEventListener('click', onRoomsCountListClick);
